@@ -9,7 +9,7 @@ CDN_USER="cdnuser"
 
 softname='smf-spamd'
 version=${1:-'1.3.6'}
-build=1
+build=2
 os_version=$(cat /etc/slackware-version | cut -f2 -d' ')
 if [[ ${os_version} == *"+" ]]; then
   os_version="current"
@@ -87,6 +87,9 @@ cp -a ${softname} ${BASE}/${packagedir}/usr/local/sbin/
 
 mkdir -p ${BASE}/${packagedir}/etc/rc.d
 cp -a ${BASE}/assets/rc.${softname} ${BASE}/${packagedir}/etc/rc.d/rc.${softname}.new
+
+mkdir -p ${BASE}/${packagedir}/usr/local/sbin || exit 1
+cp ${BASE}/assets/smf-spamd-install.sh ${BASE}/${packagedir}/usr/local/sbin/
 
 mkdir -p "${BASE}/${packagedir}/usr/doc/${softname}-${version}"
 cp -ra ${BASE}/$(basename $0) contrib init COPYING ChangeLog readme \
