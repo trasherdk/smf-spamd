@@ -42,4 +42,4 @@ if [ -f etc/smfs/smf-spamd.conf.new ]; then
   config etc/mail/smfs/smf-spamd.conf.new
 fi
 
-slackpack new-config
+slackpkg new-config
