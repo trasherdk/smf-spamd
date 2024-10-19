@@ -5,13 +5,13 @@
  */
 
 /* Version */
-#define VERSION "1.3.6"
+#define VERSION "1.3.7-2"
 
 /* Hosts/Networks whitelist (extended regex format) */
-#define WHITE_LIST "(^127\\.|^192\\.168\\.|^10\\.|86\\.48\\.96\\.)"
+#define WHITE_LIST "(^127\\.|^192\\.168\\.|^10\\.|^84\\.246\\.247\\.)"
 
 /* Maximal message size */
-#define MAX_SIZE 1048576 /* bytes (1MB)*/
+#define MAX_SIZE 1024000 * 2 /* bytes (2MB)*/
 
 /* Probable SPAM e-Mail messages Subject tagging */
 #define TAG_SUBJECT 1 /* set 0 to disable */
