@@ -19,15 +19,15 @@ PACK="${HOME}/local/packages"
 INST="/var/log/packages"
 
 get_cdn_filename () {
-	echo "ls -1 ${softname}" | sftp -q ${CDN_USER}@${CDN_HOST} | sort -V | tail -n1
+	echo "ls -1 ${softname}" | sftp -q ${CDN_USER}@${CDN_HOST} | sort -h | tail -n1
 }
 
 get_local_filename () {
-	ls -1 ${PACK}/${softname}-* | sort -V | tail -n1
+	ls -1 ${PACK}/${softname}-* | sort -h | tail -n1
 }
 
 get_installed_filename () {
-	ls -1 ${INST}/${softname}* | sort -V | tail -n1
+	ls -1 ${INST}/${softname}* | sort -h | tail -n1
 	# | sed -En "s/.*${softname}-([0-9]+\.[0-9]+\.[0-9]+).*$/\1/p"
 }
 
