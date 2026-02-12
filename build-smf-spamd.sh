@@ -60,7 +60,7 @@ packagedir=${softname}-${version}-${ARCH}-${build}
 
 #rm -fr ${BASE}/${softname}*
 echo -n "Remove old stuff: ${BASE}/${softname}-*"
-rm -fr "${BASE}/${softname}-*" \
+rm -fr ${BASE}/${softname}-* \
 && { echo "${LGREEN} OK ${RESTORE}"; } \
 || { echo "${RED} FAIL ${RESTORE}"; }
 
