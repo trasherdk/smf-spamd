@@ -32,11 +32,11 @@ get_installed_filename () {
 }
 
 get_version() {
-	echo $1  | sed -En "s/.*${softname}-([0-9]+\.[0-9]+\.[0-9]+).*$/\1/p"
+	echo "$1" | sed -En "s/.*${softname}-([0-9]+\.[0-9]+\.[0-9]+).*/\1/p"
 }
 
 get_tag() {
-	echo $1  | sed -En "s/.*-${os_version}-([0-9]+)(\.txz)?$/\1/p"
+	echo "$1" | sed -En "s/.*-${ARCH}-([0-9]+)(\.txz)?$/\1/p"
 }
 
 install_new() {
@@ -88,13 +88,13 @@ echo "${BLUE}CDN version........:${WHITE} $(basename ${CDN_FILE}) : ${YELLOW}${C
 echo "${BLUE}Local version......:${WHITE} $(basename ${PACK_FILE}) : ${YELLOW}${PACK_VERSION} ${PACK_VERSION_TAG} ${RESTORE}"
 echo "${BLUE}Installed version..:${WHITE}  $(basename ${INST_FILE}) : ${YELLOW}${VERSION} ${VERSION_TAG} ${RESTORE}"
 
-VERSION="${VERSION}-${VERSION_TAG}"
-CDN_VERSION="${CDN_VERSION}-${CDN_VERSION_TAG}"
+VERSION_FULL="${VERSION}-${VERSION_TAG}"
+CDN_VERSION_FULL="${CDN_VERSION}-${CDN_VERSION_TAG}"
 
-if [ -z ${VERSION} ]; then
+if [ -z "${VERSION}" ]; then
 	echo "=>${WHITE} No installed version. Installing new ${GREEN}${softname}-${PACK_FILE}${RESTORE}"
 	install_new ${PACK_FILE}
-elif [ "${VERSION}" != "${CDN_VERSION}" ]; then
-	echo "=>${WHITE} Upgrading ${RED}${softname}-${VERSION}${WHITE} to ${GREEN}${softname}-${CDN_VERSION}${RESTORE}"
+elif [ "${VERSION_FULL}" != "${CDN_VERSION_FULL}" ]; then
+	echo "=>${WHITE} Upgrading ${RED}${softname}-${VERSION_FULL}${WHITE} to ${GREEN}${softname}-${CDN_VERSION_FULL}${RESTORE}"
 	upgrade "$(basename ${INST_FILE})" "${PACK_FILE}"
 fi
