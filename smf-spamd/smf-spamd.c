@@ -268,7 +268,10 @@ static sfsistat smf_connect(SMFICTX *ctx, char *name, _SOCK_ADDR *sa) {
             break;
         }
     }
-    if (ignore_connect[0] && !regexec(&re_ignore_connect, host, 0, NULL, 0)) return SMFIS_ACCEPT;
+    if (ignore_connect[0] && !regexec(&re_ignore_connect, host, 0, NULL, 0)) {
+        syslog(LOG_INFO, "WHITELISTED %s [%s]", name ? name : "unknown", host);
+        return SMFIS_ACCEPT;
+    }
     if (!(context = calloc(1, sizeof(*context)))) {
         syslog(LOG_ERR, "[ERROR] %s", strerror(errno));
         return SMFIS_ACCEPT;

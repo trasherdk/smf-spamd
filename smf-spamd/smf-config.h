@@ -5,10 +5,11 @@
  */
 
 /* Version */
-#define VERSION "1.3.7-2"
+#define VERSION "1.3.8"
 
 /* Hosts/Networks whitelist (extended regex format) */
-#define WHITE_LIST "(^127\\.|^192\\.168\\.|^10\\.|^84\\.246\\.247\\.)"
+// #define WHITE_LIST "(^127\\.|^192\\.168\\.|^10\\.|^84\\.246\\.247\\.)"
+#define WHITE_LIST "" /* set empty string to disable */
 
 /* Maximal message size */
 #define MAX_SIZE 1024000 * 2 /* bytes (2MB)*/
