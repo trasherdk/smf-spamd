@@ -9,7 +9,7 @@ CDN_USER="cdnuser"
 
 softname='smf-spamd'
 version=${1:-'1.3.8'}
-build=2
+build=3
 os_version=$(cat /etc/slackware-version | cut -f2 -d' ')
 if [[ ${os_version} == *"+" ]]; then
   os_version="current"
