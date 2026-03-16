@@ -299,7 +299,11 @@ static sfsistat smf_envfrom(SMFICTX *ctx, char **args) {
     const char *site = NULL, *qid = NULL;
 
     if (smfi_getsymval(ctx, "{auth_authen}")) return SMFIS_ACCEPT;
+    /* Removed: Domain verification (SPF/DKIM) is not a spam indicator.
+     * Gmail, Hotmail, Outlook all pass, but spam comes from them too.
+     * Only skip for authenticated SMTP users (internal/trusted).
     if (verify && strcmp(verify, "OK") == 0) return SMFIS_ACCEPT;
+    */
     if (msg_size && atol(msg_size) > MAX_SIZE) return SMFIS_ACCEPT;
     if (*args) strscpy(context->from, *args, sizeof(context->from) - 1);
     if ((site = smfi_getsymval(ctx, "j")))
