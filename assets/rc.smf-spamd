@@ -3,32 +3,64 @@
 #
 # Written for Slackware Linux.
 
+SOCK=/var/run/smfs/smf-spamd.sock
+DAEMON=/usr/local/sbin/smf-spamd
+
 smfspamd_start() {
-  if [ -x /usr/local/sbin/smf-spamd ]; then
-  	if [ ! -d /var/run/smfs ]; then
-  		mkdir -p /var/run/smfs
-  	fi
-
-    chown -R smfs:smfs /var/run/smfs
-    chmod 0750 /var/run/smfs
-
-    echo -n "Starting smf-spamd milter:  "
-    /usr/local/sbin/smf-spamd \
-    && { echo "${GREEN} OK ${RESTORE}"; } \
-    || { echo "${RED} FAIL ${RESTORE}"; }
+  if [ ! -x "$DAEMON" ]; then
+    return
   fi
+
+  if pgrep -x smf-spamd >/dev/null 2>&1; then
+    echo "smf-spamd already running"
+    return
+  fi
+
+  mkdir -p /var/run/smfs
+  chown smfs:smfs /var/run/smfs
+  chmod 0750 /var/run/smfs
+  # Stale name left after a previous crash/double-start (inode still held).
+  rm -f "$SOCK"
+
+  echo -n "Starting smf-spamd milter:  "
+  if ! "$DAEMON"; then
+    echo "${RED} FAIL ${RESTORE}"
+    return 1
+  fi
+
+  # daemon() returns before smfi_main() binds; sendmail treats a missing
+  # socket as "unsafe".
+  i=0
+  while [ "$i" -lt 25 ]; do
+    if [ -S "$SOCK" ]; then
+      echo "${GREEN} OK ${RESTORE}"
+      return 0
+    fi
+    i=$((i + 1))
+    sleep 0.1
+  done
+  echo "${RED} FAIL (no socket) ${RESTORE}"
+  return 1
 }
 
 smfspamd_stop() {
   echo -n "Stopping smf-spamd milter:  "
-  killall smf-spamd 2> /dev/null \
-  && { echo "${GREEN} OK ${RESTORE}"; } \
-  || { echo "${RED} FAIL ${RESTORE}"; }
+  if ! pgrep -x smf-spamd >/dev/null 2>&1; then
+    rm -f "$SOCK"
+    echo "${GREEN} OK ${RESTORE}"
+    return 0
+  fi
+  if killall -w -q smf-spamd 2>/dev/null; then
+    rm -f "$SOCK"
+    echo "${GREEN} OK ${RESTORE}"
+  else
+    echo "${RED} FAIL ${RESTORE}"
+    return 1
+  fi
 }
 
 smfspamd_restart() {
   smfspamd_stop
-  sleep 1
   smfspamd_start
 }
 
